@@ -61,7 +61,7 @@ input_text = ""
 #캐릭터
 playerparms = [0,0,0,0,0,0,0,0]
 serv1parms = [ch1, 6, 377, 450, 20, 20, 1.1,0]
-serv2parms = [ch2,3,380,450,20,20, 1.001,1]
+serv2parms = [ch2,2.5,380,450,20,20, 1.001,1]
 
 
 # Button 클래스
@@ -686,7 +686,10 @@ def gameScreen(st=1):
                         missileXY.remove(bxy)
                         z4c+=1
                         # shotCount += 1
-                        score +=2
+                        if serv.missile==1:
+                            score+=3
+                        else:
+                            score +=2
                         rock.coord_x,rock.coord_y = shot(rock.coord_x,rock.coord_y)
                 #미사일이 큰좀비
                 if bxy[1] < zombie3.coord_y:
@@ -694,7 +697,10 @@ def gameScreen(st=1):
                         missileXY.remove(bxy)
                        
                         # shotCount += 1
-                        score +=3
+                        if serv.missile==1:
+                            score+=5
+                        else:
+                            score +=3
                         z3c +=1
                         zombie3.coord_x,zombie3.coord_y=shot(zombie3.coord_x,zombie3.coord_y)
                 #ch
@@ -703,7 +709,10 @@ def gameScreen(st=1):
                         missileXY.remove(bxy)
                        
                         # shotCount += 1
-                        score +=1
+                        if serv.missile==1:
+                            score+=2
+                        else:
+                            score +=1
                         z2c +=1
                         zombie2.coord_x,zombie2.coord_y=shot(zombie2.coord_x,zombie2.coord_y)
                 #ch
@@ -712,7 +721,10 @@ def gameScreen(st=1):
                         missileXY.remove(bxy)
                        
                         # shotCount += 1
-                        score +=1
+                        if serv.missile==1:
+                            score+=2
+                        else:
+                            score +=1
                         z1c +=1
                         zombie1.coord_x,zombie1.coord_y=shot(zombie1.coord_x,zombie1.coord_y)
                 
@@ -777,11 +789,11 @@ def gameScreen(st=1):
         
         # 점수 표시
         scorecounter(score,bombnum)
-        if score>2 and st<2:
+        if score>4 and st<2:
             fscore+=score
             st+=1
             cl('stage clear',st)
-        elif st==2 and score>2:
+        elif st==2 and score>4:
             st+=1
             fscore+=score
             cl('game clear',st)
