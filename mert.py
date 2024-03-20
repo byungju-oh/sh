@@ -37,8 +37,8 @@ itemImg = ['images/item.png',"images/필살기 갯수.png"]
 zombie1Img = pygame.image.load("images/skeleton1.png")
 zombie2Img = pygame.image.load("images/skeleton2.png")
 zombie3Img = pygame.image.load('images/skeleton3.png')
-devimg=pygame.image.load('images/devimg.png')
-clickdevimg=pygame.image.load('images/clickdevimg.png')
+
+
 rockimg=pygame.image.load('images/좀비_2-removebg-preview.png')
 explosion = pygame.image.load('images/explosion.png')
 nst=['s','images/다음스테이지화면.png','images/클리어화면1.png']
@@ -46,7 +46,7 @@ nst=['s','images/다음스테이지화면.png','images/클리어화면1.png']
 display_width = 800
 display_height = 600
 gameDisplay = pygame.display.set_mode((display_width, display_height))
-pygame.display.set_caption("슈팅")
+pygame.display.set_caption("카터")
 score,z1c,z2c,z3c,z4c=0,0,0,0,0
 #시간
 clock = pygame.time.Clock()
@@ -142,6 +142,23 @@ def append_to_json(data):
 
     with open("data.json", 'w') as file:
         json.dump(current_data, file, indent=4)
+
+## 점수 표시
+
+def display_scores():
+    scores = load_scores()
+    sorted_scores = sorted(scores, key=lambda x: x["score"], reverse=True)[:10]
+    font = pygame.font.SysFont("malgungothic", 30)
+    gameDisplay.fill((255, 255, 255))
+
+    # 점수 화면에 표시
+    for i, score in enumerate(sorted_scores):
+        text_surface = font.render(f"{i+1}. {score['name']}: {score['score']}", True, (0, 0, 0))
+        gameDisplay.blit(text_surface, (100, 100 + i * 40))
+
+    pygame.display.update()
+
+
 # # #점수 기록
 def save_to_json(name):
     global score
@@ -156,7 +173,7 @@ def save_to_json(name):
 def scoresave():
     global input_text,z1c,z2c,z3c,z4c
     font = pygame.font.SysFont("malgungothic", 30)
-    te='이름'
+    te='이름입력'
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -189,11 +206,11 @@ def scoresave():
         gameDisplay.blit(z4,(450,460))
        
         
-        startButton = Button(mmImg,40,450,120,70,mmImg,50,450,mainmenu)
+        startButton = Button(mmImg,40,450,120,70,mmImg,50,450,board)
         quitButton = Button(quitImg,40,530,120,70,quitImg,50,530,quitgame)
         # 입력 상자 표시
         pygame.draw.rect(gameDisplay, (255, 255, 255), (70, 252, 150, 40), 2)
-        text_surface = font.render(input_text, True, (255, 255, 255))
+        text_surface = font.render(input_text, True, red)
         
         gameDisplay.blit(text_surface, (70, 252))
 
@@ -228,17 +245,34 @@ def crash(text,st):
     restart(st)
 
 
-#기록
+#기록확인
 def board():
-    gameDisplay.fill(white)
-    largeText = pygame.font.SysFont("malgungothic", 46)
-    TextSurf = largeText.render(text, True, red)
-    TextRect = TextSurf.get_rect()
-    TextRect.center = ((display_width / 2), (display_height / 2))
-    gameDisplay.blit(TextSurf, TextRect)
+    scores = load_scores()
+    sorted_scores = sorted(scores, key=lambda x: x["score"], reverse=True)[:10]
+    font = pygame.font.SysFont("malgungothic", 30)
+    gameDisplay.fill((255, 255, 255))
+
+    # 점수 화면에 표시
     
-    pygame.display.update()
-    time.sleep(1)
+    
+    
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        for i, score in enumerate(sorted_scores):
+            text_surface = font.render(f"{i+1}. {score['name']}: {score['score']}", True, (0, 0, 0))
+            gameDisplay.blit(text_surface, (300, 100 + i * 40))
+
+        startButton = Button(mmImg,40,450,120,70,mmImg,50,450,mainmenu)
+        quitButton = Button(quitImg,40,530,120,70,quitImg,50,530,quitgame)
+        pygame.display.update()
+        
+    
+    
+   
     
     
         
