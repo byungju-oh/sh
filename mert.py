@@ -308,6 +308,8 @@ def shot(obj_x,obj_y):
         
 def restart(st):
     menu = True
+    global score ,z1c,z2c,z4c,z3c
+    z1c,z2c,z3c,z4c=0,0,0,0
     backgy=0
     backguy=600
     while menu:
@@ -349,7 +351,8 @@ def quitgame():
 
 # 메뉴 화면
 def mainmenu():
-
+    global score ,z1c,z2c,z4c,z3c
+    z1c,z2c,z3c,z4c=0,0,0,0
     menu = True
 
     while menu:
@@ -363,9 +366,10 @@ def mainmenu():
         startButton = Button(startImg,190,260,120,60,startImg,200,250,selectScreen)
         quitButton = Button(quitImg,445,260,120,60,quitImg,455,250,quitgame)
         # devButton=Button(devimg,650,30,100,80,clickdevimg,645,26,devScreen)
-        spButton=Button(spimg,50,400,100,80,spimg,60,390,sScreen)
+        spButton=Button(spimg,50,450,100,70,spimg,60,440,sScreen)
         # storyButton=Button(storyimg,50,500,100,80,storyimg,60,490,ssScreen)
-        storyButton=Button(storyimg,50,500,100,80,storyimg,60,490,scoresave)
+        storyButton=Button(storyimg,50,520,100,70,storyimg,60,510,scoresave)
+        boButton=Button(storyimg,50,380,100,70,storyimg,60,370,board)
         
         # startButton = Button(startImg,550,30,60,20,clickStartImg,545,26,selectScreen)
         pygame.display.update()
@@ -426,7 +430,8 @@ def devScreen1(st):
 # 선택 화면
 def selectScreen():
     select = True
-
+    global score ,z1c,z2c,z4c,z3c
+    z1c,z2c,z3c,z4c=0,0,0,0
     while select:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -497,7 +502,7 @@ def gameScreen(st=1):
     global score ,z1c,z2c,z4c,z3c
     score = 0
     
-    z1c,z2c,z3c,z4c=0,0,0,0
+    
     
     bombnum=2
     #무기 좌표 리스트
