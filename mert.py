@@ -511,8 +511,8 @@ def gameScreen(st=1):
     global input_text
     input_text=''
     score = 0
-    
-    
+    time_remaining -= clock.get_time() / 1000  # 밀리초를 초로 변환
+    font = pygame.font.SysFont("malgungothic", 30)
     
     bombnum=2
     #무기 좌표 리스트
@@ -608,7 +608,8 @@ def gameScreen(st=1):
         
         if backguy ==600:
             backguy =-600
-         
+        if time_remaining <= 0: #시간
+            game_over = True 
         backgy += 5
         backguy += 5
         bg = Background(backImg, backgx, backgy)
@@ -619,6 +620,8 @@ def gameScreen(st=1):
         bg4= Background(backImg,backgrx,backguy)
         bg5= Background(backImg,backglx,backguy)
         
+        time_text = font.render(f"Time: {max(0, int(time_remaining))}", True, (0, 0, 0)) #시간
+        gameDisplay.blit(time_text, (300, 10))
         
         gameDisplay.blit(pygame.image.load(itemImg[playerparms[7]]), (400,20 ))
         gameDisplay.blit(scoreImg, (20,20 ))
