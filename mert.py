@@ -16,6 +16,9 @@ green = (17, 124, 47)
 
 #이미지
 # titleImg = pygame.image.load("images/title.png")
+scbo=pygame.image.load('images/점수판1.png')
+scbu=pygame.image.load('images/점수등록.png')
+scbuc=pygame.image.load('images/점수순위.png')
 scoreImg=pygame.image.load('images/스코어1.png')
 startImg = pygame.image.load("images/시작.png")
 quitImg = pygame.image.load("images/게임종료.png")
@@ -37,7 +40,7 @@ itemImg = ['images/item.png',"images/필살기 갯수.png"]
 zombie1Img = pygame.image.load("images/skeleton1.png")
 zombie2Img = pygame.image.load("images/skeleton2.png")
 zombie3Img = pygame.image.load('images/skeleton3.png')
-
+gg=pygame.image.load('images/game over1.png')
 fscore=0
 rockimg=pygame.image.load('images/좀비_2-removebg-preview.png')
 explosion = pygame.image.load('images/explosion.png')
@@ -51,11 +54,14 @@ score,z1c,z2c,z3c,z4c=0,0,0,0,0
 #시간
 clock = pygame.time.Clock()
 
+
+
+
 input_text = ""
 #캐릭터
 playerparms = [0,0,0,0,0,0,0,0]
-serv1parms = [ch1, 5, 377, 450, 37, 55, 1.1,0]
-serv2parms = [ch2,3.5,380,450,37,66, 1.02,1]
+serv1parms = [ch1, 6, 377, 450, 20, 20, 1.1,0]
+serv2parms = [ch2,3,380,450,20,20, 1.001,1]
 
 
 # Button 클래스
@@ -154,7 +160,7 @@ def display_scores():
     # 점수 화면에 표시
     for i, score in enumerate(sorted_scores):
         text_surface = font.render(f"{i+1}. {score['name']}: {score['score']}", True, (0, 0, 0))
-        gameDisplay.blit(text_surface, (100, 100 + i * 40))
+        gameDisplay.blit(text_surface, (100, 250 + i * 40))
 
     pygame.display.update()
 
@@ -173,7 +179,8 @@ def save_to_json(name):
 def scoresave():
     global input_text,z1c,z2c,z3c,z4c,fscore
     font = pygame.font.SysFont("malgungothic", 30)
-    te='이름입력'
+    font1 = pygame.font.SysFont("malgungothic", 25)
+    te=''
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -194,8 +201,8 @@ def scoresave():
         
         gameDisplay.fill((255, 255, 255))
         backg = Background(sb, 0, 0)
-        na=font.render(te,True,red)
-        gameDisplay.blit(na, (80, 190))
+        na=font1.render(te,True,red)
+        gameDisplay.blit(na, (610, 350))
         z1 = font.render(str(z1c), True, red)
         z2 = font.render(str(z2c),True,red)
         gameDisplay.blit(z1, (450, 252))
@@ -211,12 +218,12 @@ def scoresave():
         startButton = Button(mmImg,40,450,120,70,mmImg,50,450,board)
         quitButton = Button(quitImg,40,530,120,70,quitImg,50,530,quitgame)
         # 입력 상자 표시
-        pygame.draw.rect(gameDisplay, (255, 255, 255), (70, 252, 150, 40)) #그냥상자
-        pygame.draw.rect(gameDisplay, red, (70, 252, 150, 40),2)  #외각선
+        # pygame.draw.rect(gameDisplay, (255, 255, 255), (600, 350, 100, 40)) #그냥상자
+        # pygame.draw.rect(gameDisplay, red, (600, 350, 100, 40),2)  #외각선
         
         text_surface = font.render(input_text, True, red)  #글자써지는위치
         
-        gameDisplay.blit(text_surface, (80, 252))
+        gameDisplay.blit(text_surface, (610, 350))
 
         pygame.display.flip()
     
@@ -237,29 +244,31 @@ def text_objects(text, font):
     return textsurface, textsurface.get_rect()
 
 # 충돌시 출력
-def crash(text,st):
-    largeText = pygame.font.SysFont("malgungothic", 46)
-    TextSurf = largeText.render(text, True, red)
-    TextRect = TextSurf.get_rect()
-    TextRect.center = ((display_width / 2), (display_height / 2))
-    gameDisplay.blit(TextSurf, TextRect)
-    
+def crash(st):
+    # # largeText = pygame.font.SysFont("malgungothic", 46)
+    # # TextSurf = largeText.render(text, True, red)
+    # TextRect = TextSurf.get_rect()
+    # TextRect.center = ((display_width / 2), (display_height / 2))
+    # gameDisplay.blit(TextSurf, TextRect)
+    backg = Background(gg, 0, 0)
     pygame.display.update()
     time.sleep(1)
+    
+
     restart(st)
 
 
 #기록확인
 def board():
     scores = load_scores()
-    sorted_scores = sorted(scores, key=lambda x: x["score"], reverse=True)[:10]
+    sorted_scores = sorted(scores, key=lambda x: x["score"], reverse=True)[:5]
     font = pygame.font.SysFont("malgungothic", 30)
     gameDisplay.fill((255, 255, 255))
 
     # 점수 화면에 표시
+    scbo
     
-    
-    
+    backg = Background(scbo, 0, 0)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -268,8 +277,8 @@ def board():
 
         for i, score in enumerate(sorted_scores):
             text_surface = font.render(f"{i+1}. {score['name']}: {score['score']}", True, (0, 0, 0))
-            gameDisplay.blit(text_surface, (300, 100 + i * 40))
-
+            gameDisplay.blit(text_surface, (320, 180 + i * 30))
+        
         startButton = Button(mmImg,40,450,120,70,mmImg,50,450,mainmenu)
         quitButton = Button(quitImg,40,530,120,70,quitImg,50,530,quitgame)
         pygame.display.update()
@@ -375,7 +384,7 @@ def mainmenu():
         spButton=Button(spimg,50,450,100,70,spimg,60,440,sScreen)
         # storyButton=Button(storyimg,50,500,100,80,storyimg,60,490,ssScreen)
         storyButton=Button(storyimg,50,520,100,70,storyimg,60,510,scoresave)
-        boButton=Button(storyimg,50,380,100,70,storyimg,60,370,board)
+        boButton=Button(scbuc,50,380,100,70,scbuc,60,370,board)
         
         # startButton = Button(startImg,550,30,60,20,clickStartImg,545,26,selectScreen)
         pygame.display.update()
@@ -413,7 +422,7 @@ def devScreen1(st):
         backg = Background(pygame.image.load(nst[2]), 0, 0)
         startButton = Button(mmImg,40,450,120,70,mmImg,50,450,mainmenu)
         quitButton = Button(quitImg,40,530,120,70,quitImg,50,530,quitgame)
-        svButton = Button(quitImg,40,330,120,70,quitImg,50,330,scoresave)  
+        svButton = Button(scbu,40,370,120,70,scbu,50,370,scoresave)  
         deltaY-= 0.7
         i=0
         msg_list=[]
@@ -500,8 +509,8 @@ def gameScreen(st=1):
     item = Gameobject(pygame.image.load(itemImg[playerparms[7]]), 5, random.randrange(0, display_width - 20), -600, 40, 35)
     zombie1 = Gameobject(zombie1Img, 3, random.randrange(0, display_width - 20),-600,40,35)
     zombie2 = Gameobject(zombie3Img, 3, random.randrange(0, display_width - 20),-1000,40,35)
-    zombie3 = Gameobject(zombie2Img, 4, random.randrange(0, display_width - 20),random.randrange(-2000, -1000),100,100)
-    rock = Gameobject(rockimg, 4, random.randrange(0, display_width - 75),random.randrange(-200, -100),100,100)
+    zombie3 = Gameobject(zombie2Img, 4, random.randrange(0, display_width - 20),random.randrange(-2000, -1000),80,40)
+    rock = Gameobject(rockimg, 4, random.randrange(0, display_width - 75),random.randrange(-200, -100),80,40)
     missile = pygame.image.load(miss[serv.missile]) #미사일 그림
     spe = Gameobject(speImg, 4, 800,-600,10,10)
     backImg=pygame.image.load(back[st])
@@ -511,7 +520,8 @@ def gameScreen(st=1):
     global input_text
     input_text=''
     score = 0
-    time_remaining -= clock.get_time() / 1000  # 밀리초를 초로 변환
+    time_remaining = 32  # 시간 제한 (초)
+    
     font = pygame.font.SysFont("malgungothic", 30)
     
     bombnum=2
@@ -533,8 +543,8 @@ def gameScreen(st=1):
     while not gameexit:
         gameDisplay.fill(white)
         
+        time_remaining -= clock.get_time() / 1000  # 밀리초를 초로 변환
         
-
         # 이벤트
         for event in pygame.event.get():
            if event.type == pygame.QUIT:
@@ -608,8 +618,7 @@ def gameScreen(st=1):
         
         if backguy ==600:
             backguy =-600
-        if time_remaining <= 0: #시간
-            game_over = True 
+        
         backgy += 5
         backguy += 5
         bg = Background(backImg, backgx, backgy)
@@ -620,8 +629,8 @@ def gameScreen(st=1):
         bg4= Background(backImg,backgrx,backguy)
         bg5= Background(backImg,backglx,backguy)
         
-        time_text = font.render(f"Time: {max(0, int(time_remaining))}", True, (0, 0, 0)) #시간
-        gameDisplay.blit(time_text, (300, 10))
+        time_text = font.render(f"Time: {max(0, int(time_remaining))}", True, red) #시간
+        gameDisplay.blit(time_text, (600, 20))
         
         gameDisplay.blit(pygame.image.load(itemImg[playerparms[7]]), (400,20 ))
         gameDisplay.blit(scoreImg, (20,20 ))
@@ -634,7 +643,8 @@ def gameScreen(st=1):
             
         gameDisplay.blit(serv.p_img, (serv.serv_x, serv.serv_y))
         
-        
+        if time_remaining <= 0: #시간
+            crash(st) 
         # 낙하 속도 
         item.coord_y += item.speed
         zombie1.coord_y += zombie1.speed
@@ -727,7 +737,7 @@ def gameScreen(st=1):
                and serv.serv_x < zombie1.coord_x + zombie1.hitbox_x \
                or serv.serv_x + serv.hitbox_x > zombie1.coord_x \
                and serv.serv_x + serv.hitbox_x < zombie1.coord_x + zombie1.hitbox_x:
-               crash('game over',st)
+               crash(st)
                 
         # ch 
         if serv.serv_y < zombie2.coord_y + zombie2.hitbox_y:
@@ -735,14 +745,14 @@ def gameScreen(st=1):
                and serv.serv_x < zombie2.coord_x + zombie2.hitbox_x \
                or serv.serv_x + serv.hitbox_x > zombie2.coord_x \
                and serv.serv_x + serv.hitbox_x < zombie2.coord_x + zombie2.hitbox_x:
-               crash('game over',st)
+               crash(st)
         # 큰좀비 
         if serv.serv_y < zombie3.coord_y + zombie3.hitbox_y:
             if serv.serv_x > zombie3.coord_x \
                and serv.serv_x < zombie3.coord_x + zombie3.hitbox_x \
                or serv.serv_x + serv.hitbox_x > zombie3.coord_x \
                and serv.serv_x + serv.hitbox_x < zombie3.coord_x + zombie3.hitbox_x:
-               crash('game over',st)
+               crash(st)
 
         # 폭탄       
         if serv.serv_y < item.coord_y + item.hitbox_y \
@@ -762,7 +772,7 @@ def gameScreen(st=1):
                and serv.serv_x < rock.coord_x + rock.hitbox_x \
                or serv.serv_x + serv.hitbox_x > rock.coord_x \
                and serv.serv_x + serv.hitbox_x < rock.coord_x + rock.hitbox_x:
-               crash('game over',st)
+               crash(st)
         
         
         # 점수 표시
