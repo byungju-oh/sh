@@ -194,7 +194,7 @@ def scoresave():
         
         gameDisplay.fill((255, 255, 255))
         backg = Background(sb, 0, 0)
-        na=font.render(te,True,white)
+        na=font.render(te,True,red)
         gameDisplay.blit(na, (80, 190))
         z1 = font.render(str(z1c), True, red)
         z2 = font.render(str(z2c),True,red)
@@ -211,10 +211,12 @@ def scoresave():
         startButton = Button(mmImg,40,450,120,70,mmImg,50,450,board)
         quitButton = Button(quitImg,40,530,120,70,quitImg,50,530,quitgame)
         # 입력 상자 표시
-        pygame.draw.rect(gameDisplay, (255, 255, 255), (70, 252, 150, 40), 2)
-        text_surface = font.render(input_text, True, red)
+        pygame.draw.rect(gameDisplay, (255, 255, 255), (70, 252, 150, 40)) #그냥상자
+        pygame.draw.rect(gameDisplay, red, (70, 252, 150, 40),2)  #외각선
         
-        gameDisplay.blit(text_surface, (70, 252))
+        text_surface = font.render(input_text, True, red)  #글자써지는위치
+        
+        gameDisplay.blit(text_surface, (80, 252))
 
         pygame.display.flip()
     
