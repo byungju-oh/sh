@@ -171,7 +171,7 @@ def save_to_json(name):
         
 
 def scoresave():
-    global input_text,z1c,z2c,z3c,z4c
+    global input_text,z1c,z2c,z3c,z4c,fscore
     font = pygame.font.SysFont("malgungothic", 30)
     te='이름입력'
     while True:
@@ -204,6 +204,8 @@ def scoresave():
         z4 = font.render(str(z4c),True,red)
         gameDisplay.blit(z3, (450, 382))
         gameDisplay.blit(z4,(450,460))
+        scc = font.render(str(fscore)+'점',True,red)
+        gameDisplay.blit(scc, (500, 330))
        
         
         startButton = Button(mmImg,40,450,120,70,mmImg,50,450,board)
