@@ -38,7 +38,7 @@ zombie1Img = pygame.image.load("images/skeleton1.png")
 zombie2Img = pygame.image.load("images/skeleton2.png")
 zombie3Img = pygame.image.load('images/skeleton3.png')
 
-
+fscore=0
 rockimg=pygame.image.load('images/좀비_2-removebg-preview.png')
 explosion = pygame.image.load('images/explosion.png')
 nst=['s','images/다음스테이지화면.png','images/클리어화면1.png']
@@ -161,11 +161,11 @@ def display_scores():
 
 # # #점수 기록
 def save_to_json(name):
-    global score
+    global fscore
     
     
     
-    data = {"name": name,'score':score}
+    data = {"name": name,'score':fscore}
 
     append_to_json(data)
         
@@ -308,8 +308,9 @@ def shot(obj_x,obj_y):
         
 def restart(st):
     menu = True
-    global score ,z1c,z2c,z4c,z3c
+    global score ,z1c,z2c,z4c,z3c,fscore
     z1c,z2c,z3c,z4c=0,0,0,0
+    fscore=0
     backgy=0
     backguy=600
     while menu:
@@ -351,8 +352,9 @@ def quitgame():
 
 # 메뉴 화면
 def mainmenu():
-    global score ,z1c,z2c,z4c,z3c
+    global score ,z1c,z2c,z4c,z3c,fscore
     z1c,z2c,z3c,z4c=0,0,0,0
+    fscore=0
     menu = True
 
     while menu:
@@ -430,8 +432,10 @@ def devScreen1(st):
 # 선택 화면
 def selectScreen():
     select = True
-    global score ,z1c,z2c,z4c,z3c
+    global score ,z1c,z2c,z4c,z3c,fscore
+    
     z1c,z2c,z3c,z4c=0,0,0,0
+    fscore=0
     while select:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -499,7 +503,9 @@ def gameScreen(st=1):
     backImg=pygame.image.load(back[st])
     x_change = 0
     y_change = 0
-    global score ,z1c,z2c,z4c,z3c
+    global score ,z1c,z2c,z4c,z3c , fscore
+    global input_text
+    input_text=''
     score = 0
     
     
@@ -755,11 +761,12 @@ def gameScreen(st=1):
         # 점수 표시
         scorecounter(score,bombnum)
         if score>2 and st<2:
-            
+            fscore+=score
             st+=1
             cl('stage clear',st)
         elif st==2 and score>2:
             st+=1
+            fscore+=score
             cl('game clear',st)
              
         
