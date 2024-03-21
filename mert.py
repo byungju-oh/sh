@@ -205,14 +205,14 @@ def scoresave():
         gameDisplay.blit(na, (610, 350))
         z1 = font.render(str(z1c), True, red)
         z2 = font.render(str(z2c),True,red)
-        gameDisplay.blit(z1, (450, 252))
-        gameDisplay.blit(z2,(450,310))
+        gameDisplay.blit(z1, (445, 252))
+        gameDisplay.blit(z2,(445,310))
         z3 = font.render(str(z3c), True, red)
         z4 = font.render(str(z4c),True,red)
-        gameDisplay.blit(z3, (450, 382))
-        gameDisplay.blit(z4,(450,460))
+        gameDisplay.blit(z3, (445, 382))
+        gameDisplay.blit(z4,(445,460))
         scc = font.render(str(fscore)+'점',True,red)
-        gameDisplay.blit(scc, (500, 330))
+        gameDisplay.blit(scc, (485, 350))
        
         
         startButton = Button(mmImg,40,450,120,70,mmImg,50,450,board)
@@ -520,7 +520,7 @@ def gameScreen(st=1):
     global input_text
     input_text=''
     score = 0
-    time_remaining = 32  # 시간 제한 (초)
+    time_remaining = 15  # 시간 제한 (초)
     timechange=clock.get_time() / 1000  # 밀리초를 초로 변환
     font = pygame.font.SysFont("malgungothic", 30)
     so = font.render('',True,red)
@@ -666,8 +666,8 @@ def gameScreen(st=1):
             
         gameDisplay.blit(serv.p_img, (serv.serv_x, serv.serv_y))
         
-        if time_remaining <= 0: #시간
-            crash(st) 
+        # if time_remaining <= 0: #시간
+        #     crash(st) 
         # 낙하 속도 
         item.coord_y += item.speed
         zombie1.coord_y += zombie1.speed
@@ -812,14 +812,24 @@ def gameScreen(st=1):
         
         # 점수 표시
         scorecounter(score,bombnum)
-        if score>4 and st<2:
-            fscore+=score
-            st+=1
-            cl('stage clear',st)
-        elif st==2 and score>4:
-            st+=1
-            fscore+=score
-            cl('game clear',st)
+        if time_remaining<=0:
+            if st<2:
+                fscore+=score 
+                st += 1
+                cl('stage clear',st)
+            elif st==2:
+                st+=1
+                fscore+=score
+                cl('game clear',st)
+                
+        # if score>4 and st<2:
+        #     fscore+=score
+        #     st+=1
+        #     cl('stage clear',st)
+        # elif st==2 and score>4:
+        #     st+=1
+        #     fscore+=score
+        #     cl('game clear',st)
              
         
         pygame.display.flip()

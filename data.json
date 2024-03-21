@@ -122,5 +122,9 @@
     {
         "name": "fd",
         "score": 8
+    },
+    {
+        "name": "g",
+        "score": 35
     }
 ]
