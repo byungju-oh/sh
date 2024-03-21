@@ -543,7 +543,7 @@ def gameScreen(st=1):
     while not gameexit:
         gameDisplay.fill(white)
         
-        time_remaining -= timechange
+        
         
         # 이벤트
         for event in pygame.event.get():
@@ -651,7 +651,7 @@ def gameScreen(st=1):
         bg3 = Background(backImg, backgx, backguy)
         bg4= Background(backImg,backgrx,backguy)
         bg5= Background(backImg,backglx,backguy)
-        
+        time_remaining -= timechange
         time_text = font.render(f"Time: {max(0, int(time_remaining))}", True, red) #시간
         gameDisplay.blit(time_text, (600, 20))
         gameDisplay.blit(so, (325,255 ))
