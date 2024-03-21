@@ -404,8 +404,11 @@ def devScreen1(st):
     pink = (255,200,200)
     
     game_credits='''
-    
+    이미지 수집, 가공 : 서승원, 이준협
+     
+    게임 기능수정 : 박성수, 오병주
     https://opengameart.org/
+    https://kr.freepik.com/
     ''' 
     centerx, centery = screen.get_rect().centerx, screen.get_rect().centery
     deltaY = centery + 50      
@@ -767,7 +770,7 @@ def gameScreen(st=1):
 
        # 충돌처리
         #ch 
-        if serv.serv_y < zombie1.coord_y + zombie1.hitbox_y:
+        if serv.serv_y < zombie1.coord_y + zombie1.hitbox_y and serv.serv_y+serv.hitbox_y > zombie1.coord_y:
             if serv.serv_x > zombie1.coord_x \
                and serv.serv_x < zombie1.coord_x + zombie1.hitbox_x \
                or serv.serv_x + serv.hitbox_x > zombie1.coord_x \
@@ -775,14 +778,14 @@ def gameScreen(st=1):
                crash(st)
                 
         # ch 
-        if serv.serv_y < zombie2.coord_y + zombie2.hitbox_y:
+        if serv.serv_y < zombie2.coord_y + zombie2.hitbox_y and serv.serv_y+serv.hitbox_y > zombie2.coord_y:
             if serv.serv_x > zombie2.coord_x \
                and serv.serv_x < zombie2.coord_x + zombie2.hitbox_x \
                or serv.serv_x + serv.hitbox_x > zombie2.coord_x \
                and serv.serv_x + serv.hitbox_x < zombie2.coord_x + zombie2.hitbox_x:
                crash(st)
         # 큰좀비 
-        if serv.serv_y < zombie3.coord_y + zombie3.hitbox_y:
+        if serv.serv_y < zombie3.coord_y + zombie3.hitbox_y and serv.serv_y+serv.hitbox_y > zombie3.coord_y:
             if serv.serv_x > zombie3.coord_x \
                and serv.serv_x < zombie3.coord_x + zombie3.hitbox_x \
                or serv.serv_x + serv.hitbox_x > zombie3.coord_x \
@@ -802,7 +805,7 @@ def gameScreen(st=1):
                 item.coord_x = random.randrange(0, display_width - 25)
                 bombnum += 1
         #운석 충돌
-        if serv.serv_y < rock.coord_y + rock.hitbox_y:
+        if serv.serv_y < rock.coord_y + rock.hitbox_y and serv.serv_y+serv.hitbox_y > rock.coord_y:
             if serv.serv_x > rock.coord_x \
                and serv.serv_x < rock.coord_x + rock.hitbox_x \
                or serv.serv_x + serv.hitbox_x > rock.coord_x \
