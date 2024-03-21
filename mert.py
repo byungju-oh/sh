@@ -521,9 +521,9 @@ def gameScreen(st=1):
     input_text=''
     score = 0
     time_remaining = 32  # 시간 제한 (초)
-    
+    timechange=clock.get_time() / 1000  # 밀리초를 초로 변환
     font = pygame.font.SysFont("malgungothic", 30)
-    
+    so = font.render('',True,red)
     bombnum=2
     #무기 좌표 리스트
     missileXY =[]
@@ -537,66 +537,89 @@ def gameScreen(st=1):
     backgy=0
     backguy=600
     
-    
+    paused = False
     gameexit = False 
     
     while not gameexit:
         gameDisplay.fill(white)
         
-        time_remaining -= clock.get_time() / 1000  # 밀리초를 초로 변환
+        time_remaining -= timechange
         
         # 이벤트
         for event in pygame.event.get():
            if event.type == pygame.QUIT:
                quitgame()
-           
-           
-             
            if event.type == pygame.KEYDOWN:
-               if event.key == pygame.K_LEFT and serv.serv_x > 0:
-                   x_change = serv.speed*-1 + -1*serv.speedmult
-                   backgx += 30
-                   backgrx += 30
-                   backglx += 30
-               elif event.key == pygame.K_RIGHT and serv.serv_x < display_width - 45:
-                   x_change = serv.speed + serv.speedmult
-                   backgx -= 30
-                   backgrx -= 30
-                   backglx -= 30
-               elif event.key == pygame.K_UP and serv.serv_y > 0:
-                   y_change = -1*serv.speed -1*serv.speedmult
-               
-               elif event.key == pygame.K_DOWN and serv.serv_y < display_height-serv.hitbox_y:
-                   y_change = serv.speed + serv.speedmult
-               
-               
-               elif event.key == pygame.K_SPACE: #미사일
-                   missileX = serv.serv_x + serv.hitbox_x/2
-                   missileY = serv.serv_y - serv.hitbox_y
-                   missileXY.append([missileX,missileY])
-                   
-               elif event.key == pygame.K_LSHIFT and bombnum>0: #폭탄
-                    # gameDisplay.blit(spe, (50,100 ))
-                    spe.coord_y = 0
-                    spe.coord_x = 0
-                    gameDisplay.blit(spe.b_image, (spe.coord_x,spe.coord_y ))
-                    pygame.display.update()
-                    clock.tick(60)
-                    time.sleep(1) 
-                    item.coord_y = -1000
-                    item.coord_x = random.randrange(0, display_width - 25)
-                    zombie1.coord_y = -1000
-                    zombie1.coord_x = random.randrange(0, display_width - 25)
-                    zombie2.coord_y = -1000
-                    zombie2.coord_x = random.randrange(0, display_width - 25)
-                    zombie3.coord_y = -2000
-                    zombie3.coord_x = random.randrange(0, display_width - 56)
-                    rock.coord_y = -1000
-                    rock.coord_x = random.randrange(0, display_width - 70)
-                    bombnum -=1
-                    spe.coord_y = 800
-                    spe.coord_x = 600
+                if event.key == pygame.K_p:  # 'p' 키를 누르면
+                    paused = not paused  # 일시 정지 상태를 변경
+                    if paused:
+                        x_change = 0
+                        y_change = 0
+                        rock.speed=0
+                        zombie1.speed=0
+                        zombie2.speed=0
+                        zombie3.speed=0
+                        item.speed=0
+                        timechange=0
+                        so = font.render('일시정지',True,red)
+                        
+                        
+                        
+                    else:
+                        rock.speed=5
+                        zombie1.speed=3
+                        zombie2.speed=3
+                        zombie3.speed=4
+                        item.speed=3
+                        timechange=clock.get_time() / 1000
+                        so = font.render('',True,red)
+                        
+           if not paused: 
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT and serv.serv_x > 0:
+                        x_change = serv.speed*-1 + -1*serv.speedmult
+                        backgx += 30
+                        backgrx += 30
+                        backglx += 30
+                    elif event.key == pygame.K_RIGHT and serv.serv_x < display_width - 45:
+                        x_change = serv.speed + serv.speedmult
+                        backgx -= 30
+                        backgrx -= 30
+                        backglx -= 30
+                    elif event.key == pygame.K_UP and serv.serv_y > 0:
+                        y_change = -1*serv.speed -1*serv.speedmult
                     
+                    elif event.key == pygame.K_DOWN and serv.serv_y < display_height-serv.hitbox_y:
+                        y_change = serv.speed + serv.speedmult
+                    
+                    
+                    elif event.key == pygame.K_SPACE: #미사일
+                        missileX = serv.serv_x + serv.hitbox_x/2
+                        missileY = serv.serv_y - serv.hitbox_y
+                        missileXY.append([missileX,missileY])
+                        
+                    elif event.key == pygame.K_LSHIFT and bombnum>0: #폭탄
+                            # gameDisplay.blit(spe, (50,100 ))
+                            spe.coord_y = 0
+                            spe.coord_x = 0
+                            gameDisplay.blit(spe.b_image, (spe.coord_x,spe.coord_y ))
+                            pygame.display.update()
+                            clock.tick(60)
+                            time.sleep(1) 
+                            item.coord_y = -1000
+                            item.coord_x = random.randrange(0, display_width - 25)
+                            zombie1.coord_y = -1000
+                            zombie1.coord_x = random.randrange(0, display_width - 25)
+                            zombie2.coord_y = -1000
+                            zombie2.coord_x = random.randrange(0, display_width - 25)
+                            zombie3.coord_y = -2000
+                            zombie3.coord_x = random.randrange(0, display_width - 56)
+                            rock.coord_y = -1000
+                            rock.coord_x = random.randrange(0, display_width - 70)
+                            bombnum -=1
+                            spe.coord_y = 800
+                            spe.coord_x = 600
+                        
                     
                     
            if event.type in [pygame.KEYUP]:
@@ -631,7 +654,7 @@ def gameScreen(st=1):
         
         time_text = font.render(f"Time: {max(0, int(time_remaining))}", True, red) #시간
         gameDisplay.blit(time_text, (600, 20))
-        
+        gameDisplay.blit(so, (325,255 ))
         gameDisplay.blit(pygame.image.load(itemImg[playerparms[7]]), (400,20 ))
         gameDisplay.blit(scoreImg, (20,20 ))
         gameDisplay.blit(spe.b_image, (spe.coord_x,spe.coord_y ))
