@@ -82,5 +82,9 @@
     {
         "name": "name",
         "score": 0
+    },
+    {
+        "name": "f",
+        "score": 3
     }
 ]
