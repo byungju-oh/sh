@@ -708,6 +708,7 @@ def gameScreen(st=1):
             zombiex=0
             zsx1=0
             zsx=0
+            zsy1=0
             
             # eltime = 0
         else:
