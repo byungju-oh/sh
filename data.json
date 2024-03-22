@@ -3,15 +3,10 @@
         "name": "rs",
         "score": 4
     },
-    {  "name": "xxx",
+    {
+        "name": "xxx",
         "score": 0
     },
-    
-    
-    
-    
-    
-   
     {
         "name": "22",
         "score": 4
@@ -83,5 +78,9 @@
     {
         "name": "g",
         "score": 35
+    },
+    {
+        "name": "name",
+        "score": 0
     }
 ]

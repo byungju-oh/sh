@@ -16,6 +16,8 @@ green = (17, 124, 47)
 
 #이미지
 # titleImg = pygame.image.load("images/title.png")
+ib=pygame.image.load('images/게임방법-removebg-preview.png')
+ibb=pygame.image.load('images/게임조작 설명2.png')
 scbo=pygame.image.load('images/점수판1.png')
 scbu=pygame.image.load('images/점수등록.png')
 scbuc=pygame.image.load('images/점수순위.png')
@@ -215,7 +217,7 @@ def scoresave():
         gameDisplay.blit(scc, (485, 350))
        
         
-        startButton = Button(mmImg,40,450,120,70,mmImg,50,450,board)
+        startButton = Button(scbuc,40,450,120,70,scbuc,50,450,board)
         quitButton = Button(quitImg,40,530,120,70,quitImg,50,530,quitgame)
         # 입력 상자 표시
         # pygame.draw.rect(gameDisplay, (255, 255, 255), (600, 350, 100, 40)) #그냥상자
@@ -233,7 +235,7 @@ def scorecounter(count,bombnum):
     text = font.render(str(count), True, black)
     bomb = font.render(str(bombnum),True,red)
     gameDisplay.blit(text, (150, 22))
-    gameDisplay.blit(bomb,(450,21))        
+    gameDisplay.blit(bomb,(350,21))        
 
 def drawObject(obj,x,y):
     
@@ -294,11 +296,11 @@ def board():
 
 def cl(text,st):
     gameDisplay.fill(white)
-    largeText = pygame.font.SysFont("malgungothic", 46)
-    TextSurf = largeText.render(text, True, red)
-    TextRect = TextSurf.get_rect()
-    TextRect.center = ((display_width / 2), (display_height / 2))
-    gameDisplay.blit(TextSurf, TextRect)
+    # largeText = pygame.font.SysFont("malgungothic", 46)
+    # TextSurf = largeText.render(text, True, red)
+    # TextRect = TextSurf.get_rect()
+    # TextRect.center = ((display_width / 2), (display_height / 2))
+    # gameDisplay.blit(TextSurf, TextRect)
     backg = Background(pygame.image.load(nst[st-1]), 0, 0)
     pygame.display.update()
     time.sleep(1)
@@ -378,19 +380,41 @@ def mainmenu():
         gameDisplay.fill(white)
         backg = Background(mainImg, 0, 0)
         # titletext = gameDisplay.blit(titleImg, (220,150))
-        startButton = Button(startImg,190,260,120,60,startImg,200,250,selectScreen)
+        startButton = Button(startImg,220,260,120,60,startImg,230,250,selectScreen)
         quitButton = Button(quitImg,445,260,120,60,quitImg,455,250,quitgame)
         # devButton=Button(devimg,650,30,100,80,clickdevimg,645,26,devScreen)
         spButton=Button(spimg,50,450,100,70,spimg,60,440,sScreen)
         # storyButton=Button(storyimg,50,500,100,80,storyimg,60,490,ssScreen)
-        storyButton=Button(storyimg,50,520,100,70,storyimg,60,510,scoresave)
+        storyButton=Button(storyimg,50,520,100,70,storyimg,60,510,ssScreen)
         boButton=Button(scbuc,50,380,100,70,scbuc,60,370,board)
+        boButton=Button(ib,50,310,100,70,ib,60,300,info)
         
         # startButton = Button(startImg,550,30,60,20,clickStartImg,545,26,selectScreen)
         pygame.display.update()
         clock.tick(15)
    
+#게임설명
+def info():
+    select = True
+    
+    
+    while select:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+               quitgame()
+
+
+        gameDisplay.fill(white)
+        backg = Background(ibb, 0, 0)
         
+        
+        startButton = Button(mmImg,590,520,150,70,mmImg,590,510,mainmenu)
+        selectButton = Button(startImg,380,520,150,70,startImg,380,510,selectScreen)
+        
+        pygame.display.update()
+        clock.tick(15)
+
+           
         
 def devScreen1(st):
     screen=pygame.display.set_mode([800,600])
@@ -404,13 +428,12 @@ def devScreen1(st):
     pink = (255,200,200)
     
     game_credits='''
-    이미지 수집, 가공 : 서승원, 이준협
-     
-    게임 기능수정 : 박성수, 오병주
-    https://opengameart.org/
-    https://kr.freepik.com/
+          이미지 수집, 가공 : 서승원, 이준협     
+        게임 기능수정 : 박성수, 오병주
+        https://opengameart.org/
+      https://kr.freepik.com/
     ''' 
-    centerx, centery = screen.get_rect().centerx, screen.get_rect().centery
+    centerx, centery = screen.get_rect().centerx, screen.get_rect().centery #센터좌표가지기
     deltaY = centery + 50      
     running =True
     while running:
@@ -437,11 +460,13 @@ def devScreen1(st):
             msg=font.render(line, True, red)
             msg_list.append(msg)
             pos= msg.get_rect(center=(centerx, centery+deltaY+30*i))
+            
             pos_list.append(pos)
             i=i+1
             
         for j in range(i):
             screen.blit(msg_list[j], pos_list[j])
+            # screen.blit(msg_list[j], pos_list[j])
           
         pygame.display.update()
 
@@ -523,9 +548,16 @@ def gameScreen(st=1):
     global input_text
     input_text=''
     score = 0
-    time_remaining = 15  # 시간 제한 (초)
-    timechange=clock.get_time() / 1000  # 밀리초를 초로 변환
+    #시간연습
+    start_time = time.time()
+    pause_start_time=None
+    pstime=0
+    pause_time_p=0
+    time_limit=15 # 시간 제한 (초)
+    # timechange=clock.get_time() / 1000  # 밀리초를 초로 변환
+    # timechange=pygame.time.get_ticks()
     font = pygame.font.SysFont("malgungothic", 30)
+    font1 = pygame.font.SysFont("malgungothic", 25)
     so = font.render('',True,red)
     bombnum=2
     #무기 좌표 리스트
@@ -564,17 +596,21 @@ def gameScreen(st=1):
                         zombie3.speed=0
                         item.speed=0
                         timechange=0
+                        pstime=start_time
+                        pause_start_time=time.time()
                         so = font.render('일시정지',True,red)
                         
                         
                         
                     else:
-                        rock.speed=5
+                        rock.speed=4
                         zombie1.speed=3
                         zombie2.speed=3
                         zombie3.speed=4
-                        item.speed=3
-                        timechange=clock.get_time() / 1000
+                        item.speed=5
+                        # timechange=clock.get_time() / 1000
+                        # timechange=pygame.time.get_ticks()
+                        pause_time_p +=time.time() - pause_start_time 
                         so = font.render('',True,red)
                         
            if not paused: 
@@ -654,11 +690,22 @@ def gameScreen(st=1):
         bg3 = Background(backImg, backgx, backguy)
         bg4= Background(backImg,backgrx,backguy)
         bg5= Background(backImg,backglx,backguy)
-        time_remaining -= timechange
+        
+        s1 = font.render('스테이지:'+str(st),True,black)
+        gameDisplay.blit(s1, (430, 20))
+        # time_remaining -= timechange
+        if  paused:
+            # eltime=int(time.time()-start_time-pause_time_p)
+            eltime = int(pause_start_time-pstime)
+            # eltime = 0
+        else:
+            # eltime = int(pause_start_time-pstime)
+            eltime=int(time.time()-start_time-pause_time_p)
+        time_remaining =time_limit- eltime
         time_text = font.render(f"Time: {max(0, int(time_remaining))}", True, red) #시간
         gameDisplay.blit(time_text, (600, 20))
         gameDisplay.blit(so, (325,255 ))
-        gameDisplay.blit(pygame.image.load(itemImg[playerparms[7]]), (400,20 ))
+        gameDisplay.blit(pygame.image.load(itemImg[playerparms[7]]), (300,20 ))
         gameDisplay.blit(scoreImg, (20,20 ))
         gameDisplay.blit(spe.b_image, (spe.coord_x,spe.coord_y ))
         gameDisplay.blit(item.b_image, (item.coord_x, item.coord_y))
@@ -835,7 +882,7 @@ def gameScreen(st=1):
         #     cl('game clear',st)
              
         
-        pygame.display.flip()
+        pygame.display.update()
         clock.tick(60)
         
         
