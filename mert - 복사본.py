@@ -535,12 +535,18 @@ def ssScreen():
 def gameScreen(st=1):
     serv = Player(playerparms[0],playerparms[1],playerparms[2],playerparms[3],playerparms[4],playerparms[5],playerparms[6],playerparms[7])
     item = Gameobject(pygame.image.load(itemImg[playerparms[7]]), 5, random.randrange(0, display_width - 20), -600, 40, 35)
-    zombie1 = Gameobject(zombie1Img, 3, random.randrange(0, display_width - 20),-600,40,35)
+    zombie1 = Gameobject(zombie1Img, 5, random.randrange(0, display_width - 20),-600,40,35)
     zombie2 = Gameobject(zombie3Img, 3, random.randrange(0, display_width - 20),-1000,40,35)
     zombie3 = Gameobject(zombie2Img, 4, random.randrange(0, display_width - 20),random.randrange(-2000, -1000),80,80)
     rock = Gameobject(rockimg, 4, random.randrange(0, display_width - 75),random.randrange(-200, -100),80,80)
     missile = pygame.image.load(miss[serv.missile]) #미사일 그림
     spe = Gameobject(speImg, 4, 800,-600,10,10)
+    zs=[2,2,2,3,3,4,4,3,3,2,2,3,3,5,6,3,2,1,5,2,4,30,5,2,4,3,5,2,5,1,4,5,6,2,4,-4,-4,-2,-3,-2,-3,-4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-3,-2,-4,-2,-1,-2,-4,-2,0,-3,-3,0,-3,-2,0,0,0,-3,-2,-4,-2,-1,-2,-4,-2,-3,-3,-3]
+    zs1=[-3,-3,-3,-2,-4,-3,-3,-3,-2,-4,-3,-3,-3,-2,-4,-3,-3,-3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-2,-4,-3,-3,-3,-2,-4,-3,-3,-3,-2,-4,3,3,3,2,3,23,23,2,3,2,2,3,2,2,3,3,10,10,10,10,3,3,3,3,3,3,3,3,3,3,3,-3,-3,-3,-2,-4,-3]
+    zsy=[3,3,3,3,3,3,3,3,3,3,3,3,20,0,0,0,0,0,0,0,0,-15]
+    zidy=0
+    zidx=0
+    zidx1=0
     backImg=pygame.image.load(back[st])
     x_change = 0
     y_change = 0
@@ -549,11 +555,13 @@ def gameScreen(st=1):
     input_text=''
     score = 0
     #시간연습
-    # start_time = time.time()
-    # pause_start_time=None
-    # pause_time_p=0
-    time_remaining = 15 # 시간 제한 (초)
-    timechange=clock.get_time() / 1000  # 밀리초를 초로 변환
+    start_time = time.time()
+    pause_start_time=None
+    pstime=0
+    pause_time_p=0
+    
+    time_limit=15 # 시간 제한 (초)
+    # timechange=clock.get_time() / 1000  # 밀리초를 초로 변환
     # timechange=pygame.time.get_ticks()
     font = pygame.font.SysFont("malgungothic", 30)
     font1 = pygame.font.SysFont("malgungothic", 25)
@@ -595,21 +603,21 @@ def gameScreen(st=1):
                         zombie3.speed=0
                         item.speed=0
                         timechange=0
-                        
-                        # pause_start_time=time.time()
+                        pstime=start_time
+                        pause_start_time=time.time()
                         so = font.render('일시정지',True,red)
                         
                         
                         
                     else:
                         rock.speed=4
-                        zombie1.speed=3
+                        zombie1.speed=5
                         zombie2.speed=3
                         zombie3.speed=4
                         item.speed=5
-                        timechange=clock.get_time() / 1000
+                        # timechange=clock.get_time() / 1000
                         # timechange=pygame.time.get_ticks()
-                        # pause_time_p +=time.time() - pause_start_time 
+                        pause_time_p +=time.time() - pause_start_time 
                         so = font.render('',True,red)
                         
            if not paused: 
@@ -692,9 +700,31 @@ def gameScreen(st=1):
         
         s1 = font.render('스테이지:'+str(st),True,black)
         gameDisplay.blit(s1, (430, 20))
-        time_remaining -= timechange
-        # eltime=int(time.time()-start_time-pause_time_p)
-        # time_remaining -= eltime
+        # time_remaining -= timechange
+        if  paused:
+            # eltime=int(time.time()-start_time-pause_time_p)
+            eltime = int(pause_start_time-pstime)
+            itemx=0
+            zombiex=0
+            zsx1=0
+            zsx=0
+            
+            # eltime = 0
+        else:
+            # eltime = int(pause_start_time-pstime)
+            eltime=int(time.time()-start_time-pause_time_p)
+            itemx=random.randrange(-7,7)
+            zombiex=2
+            if zidx>=len(zs):
+                zidx=0
+            if zidx1>=len(zs1):
+                zidx1=0
+            zsx=zs[zidx]
+            zsx1=zs1[zidx1]
+            zidx +=1
+            zidx1 +=1
+            
+        time_remaining =time_limit- eltime
         time_text = font.render(f"Time: {max(0, int(time_remaining))}", True, red) #시간
         gameDisplay.blit(time_text, (600, 20))
         gameDisplay.blit(so, (325,255 ))
@@ -713,11 +743,15 @@ def gameScreen(st=1):
         #     crash(st) 
         # 낙하 속도 
         item.coord_y += item.speed
+        item.coord_x += itemx
         zombie1.coord_y += zombie1.speed
+        zombie2.coord_x += zsx1
+        zombie1.coord_x -= zombiex
         zombie2.coord_y += zombie1.speed
         zombie3.coord_y += zombie3.speed
         rock.coord_y += rock.speed
-
+        # rock.coord_x += zombiex
+        rock.coord_x  += zsx
         #이동 제한
         if serv.serv_x > display_width - serv.hitbox_x or serv.serv_x < 0:
             x_change = 0

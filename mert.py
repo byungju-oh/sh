@@ -535,12 +535,18 @@ def ssScreen():
 def gameScreen(st=1):
     serv = Player(playerparms[0],playerparms[1],playerparms[2],playerparms[3],playerparms[4],playerparms[5],playerparms[6],playerparms[7])
     item = Gameobject(pygame.image.load(itemImg[playerparms[7]]), 5, random.randrange(0, display_width - 20), -600, 40, 35)
-    zombie1 = Gameobject(zombie1Img, 3, random.randrange(0, display_width - 20),-600,40,35)
+    zombie1 = Gameobject(zombie1Img, 5, random.randrange(0, display_width - 20),-600,40,35)
     zombie2 = Gameobject(zombie3Img, 3, random.randrange(0, display_width - 20),-1000,40,35)
-    zombie3 = Gameobject(zombie2Img, 4, random.randrange(0, display_width - 20),random.randrange(-2000, -1000),80,80)
+    zombie3 = Gameobject(zombie2Img, 4, random.randrange(0, display_width - 20),random.randrange(-500, -200),80,80)
     rock = Gameobject(rockimg, 4, random.randrange(0, display_width - 75),random.randrange(-200, -100),80,80)
     missile = pygame.image.load(miss[serv.missile]) #미사일 그림
     spe = Gameobject(speImg, 4, 800,-600,10,10)
+    zs=[2,2,2,3,3,4,4,3,3,2,2,3,3,5,6,3,2,1,5,2,4,30,5,2,4,3,5,2,5,1,4,5,6,2,4,-4,-4,-2,-3,-2,-3,-4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-3,-2,-4,-2,-1,-2,-4,-2,0,-3,-3,0,-3,-2,0,0,0,-3,-2,-4,-2,-1,-2,-4,-2,-3,-3,-3]
+    zs1=[-3,-3,-3,-2,-4,-3,-3,-3,-2,-4,-3,-3,-3,-2,-4,-3,-3,-3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-2,-4,-3,-3,-3,-2,-4,-3,-3,-3,-2,-4,3,3,3,2,3,23,23,2,3,2,2,3,2,2,3,3,10,10,10,10,3,3,3,3,3,3,3,3,3,3,3,-3,-3,-3,-2,-4,-3]
+    zsy=[3,3,3,3,3,3,3,3,3,3,3,3,3,20,-20,20,-20,20,-20,20,-20,20,-20,20,-20,20,-20,20,20,-20,20,-20,-20,20,-20,20,-20,20,-20,20,-20,180,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-15]
+    zidy=0
+    zidx=0
+    zidx1=0
     backImg=pygame.image.load(back[st])
     x_change = 0
     y_change = 0
@@ -553,6 +559,7 @@ def gameScreen(st=1):
     pause_start_time=None
     pstime=0
     pause_time_p=0
+    
     time_limit=15 # 시간 제한 (초)
     # timechange=clock.get_time() / 1000  # 밀리초를 초로 변환
     # timechange=pygame.time.get_ticks()
@@ -604,7 +611,7 @@ def gameScreen(st=1):
                         
                     else:
                         rock.speed=4
-                        zombie1.speed=3
+                        zombie1.speed=5
                         zombie2.speed=3
                         zombie3.speed=4
                         item.speed=5
@@ -651,7 +658,7 @@ def gameScreen(st=1):
                             zombie1.coord_x = random.randrange(0, display_width - 25)
                             zombie2.coord_y = -1000
                             zombie2.coord_x = random.randrange(0, display_width - 25)
-                            zombie3.coord_y = -2000
+                            zombie3.coord_y = -300
                             zombie3.coord_x = random.randrange(0, display_width - 56)
                             rock.coord_y = -1000
                             rock.coord_x = random.randrange(0, display_width - 70)
@@ -697,10 +704,30 @@ def gameScreen(st=1):
         if  paused:
             # eltime=int(time.time()-start_time-pause_time_p)
             eltime = int(pause_start_time-pstime)
+            itemx=0
+            zombiex=0
+            zsx1=0
+            zsx=0
+            
             # eltime = 0
         else:
             # eltime = int(pause_start_time-pstime)
             eltime=int(time.time()-start_time-pause_time_p)
+            itemx=random.randrange(-7,7)
+            zombiex=2
+            if zidx>=len(zs):
+                zidx=0
+            if zidx1>=len(zs1):
+                zidx1=0
+            if zidy>=len(zsy):
+                zidy=0
+            zsy1=zsy[zidy]
+            zsx=zs[zidx]
+            zsx1=zs1[zidx1]
+            zidx +=1
+            zidx1 +=1
+            zidy+=1
+            
         time_remaining =time_limit- eltime
         time_text = font.render(f"Time: {max(0, int(time_remaining))}", True, red) #시간
         gameDisplay.blit(time_text, (600, 20))
@@ -720,11 +747,17 @@ def gameScreen(st=1):
         #     crash(st) 
         # 낙하 속도 
         item.coord_y += item.speed
+        item.coord_x += itemx
         zombie1.coord_y += zombie1.speed
+        zombie2.coord_x += zsx1
+        ######
+        zombie3.coord_y += zsy1
+        zombie1.coord_x -= zombiex
         zombie2.coord_y += zombie1.speed
-        zombie3.coord_y += zombie3.speed
+        # zombie3.coord_y += zombie3.speed
         rock.coord_y += rock.speed
-
+        # rock.coord_x += zombiex
+        rock.coord_x  += zsx
         #이동 제한
         if serv.serv_x > display_width - serv.hitbox_x or serv.serv_x < 0:
             x_change = 0
@@ -742,7 +775,7 @@ def gameScreen(st=1):
             zombie2.coord_y = -410
             zombie2.coord_x = random.randrange(0, display_width - 25)
         if zombie3.coord_y > display_height:
-            zombie3.coord_y = -2000
+            zombie3.coord_y = -400
             zombie3.coord_x = random.randrange(0, display_width - 56)
         if rock.coord_y > display_height:
             rock.coord_y = -200
